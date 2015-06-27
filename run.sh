@@ -4,7 +4,7 @@ main() {
   local mongoid_yml_path="$PWD/config/mongoid.yml"
 
   if [ -f "$mongoid_yml_path" ]; then
-    debug 'config/database.yml already exists and will be overwritten'
+    debug 'config/mongoid.yml already exists and will be overwritten'
   fi
 
   if [ -z "$MONGO_PORT_27017_TCP_ADDR" ]; then
@@ -23,10 +23,6 @@ main() {
     export WERCKER_RAILS_MONGOID_YML_DB_NAME="$db_name_default"
   fi
 
-  info "Auto detecting service"
-
-  fail 'Unable to auto detect service; please set "service" option'
-
   info "Generating mongoid.yml template"
   tee "$mongoid_yml_path" << EOF
 test:
@@ -35,6 +31,10 @@ test:
       database: <%= ENV['WERCKER_RAILS_MONGOID_YML_DB_NAME'] %>
       hosts:
         - <%= ENV['MONGO_PORT_27017_TCP_ADDR'] %>:<%= ENV['MONGO_PORT_27017_TCP_PORT'] %>
+      options:
+        read: primary
+        max_retries: 1
+        retry_interval: 0
 EOF
 }
 
