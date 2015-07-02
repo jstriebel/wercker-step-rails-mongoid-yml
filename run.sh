@@ -24,6 +24,7 @@ main() {
   fi
 
   info "Generating mongoid.yml template"
+  mkdir -p $(dirname "${mongoid_yml_path}")
   tee "$mongoid_yml_path" << EOF
 test:
   sessions:
