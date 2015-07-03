@@ -23,6 +23,8 @@ main() {
     export WERCKER_RAILS_MONGOID_YML_DB_NAME="$db_name_default"
   fi
 
+  info "exporting MONGOID_ENV='test' as a fallback"
+  export MONGOID_ENV='test'
   info "Generating mongoid.yml template"
   mkdir -p "$(dirname "${mongoid_yml_path}")"
   tee "$mongoid_yml_path" << EOF
